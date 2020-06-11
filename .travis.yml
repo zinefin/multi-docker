@@ -14,7 +14,7 @@ after_success:
     - docker build -t zinefin/multi-server ./server
     - docker build -t zinefin/multi-worker ./worker
 
-    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+    - echo "$DOCKER_PASSWORD" | docker login docker.io -u "$DOCKER_ID" --password-stdin
     - docker push zinefin/multi-client
     - docker push zinefin/multi-nginx 
     - docker push zinefin/multi-server
