@@ -1,0 +1,21 @@
+sudo: required
+services:
+    - docker
+
+before_install:
+    - docker build -t zinefin/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+    - docker run zinefin/react-test npm test -- --coverage
+
+after_success:
+    - docker build -t zinefin/multi-client ./client 
+    - docker build -t zinefin/multi-nginx ./nginx
+    - docker build -t zinefin/multi-server ./server
+    - docker build -t zinefin/multi-worker ./worker
+
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+    - docker push zinefin/multi-client
+    - docker push zinefin/multi-nginx 
+    - docker push zinefin/multi-server
+    - docker push zinefin/multi-worker
